@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 Simple Social - Clean & Fast</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .app {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .auth-section {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .form-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        input {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .btn {
+            padding: 10px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        
+        .btn:hover { background: #0056b3; }
+        .btn-success { background: #28a745; }
+        .btn-danger { background: #dc3545; }
+        .btn-small { padding: 6px 12px; font-size: 12px; }
+        
+        .user-info {
+            background: #e3f2fd;
+            padding: 15px 20px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .create-post {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .create-post textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            resize: vertical;
+            font-family: inherit;
+            margin-bottom: 10px;
+        }
+        
+        .post {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            background: white;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+        
+        .post-info {
+            flex: 1;
+        }
+        
+        .post-author {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .post-time {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .post-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .post-content {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            background: #f8f9fa;
+        }
+        
+        .action-btn.liked {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+        
+        .action-btn.saved {
+            color: #f39c12;
+            border-color: #f39c12;
+        }
+        
+        .comment-section {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .comment-input {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .comment-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+        
+        .comment {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            color: #007bff;
+            margin-right: 6px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .message {
+            padding: 12px 20px;
+            margin: 0 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .hidden { display: none; }
+        
+        .recommendations {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            margin: 10px 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .controls {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .controls .btn {
+            margin: 0 5px;
+        }
+        
+        @media (max-width: 600px) {
+            .app {
+                margin: 0;
+                max-width: none;
+            }
+            
+            .form-group {
+                flex-direction: column;
+            }
+            
+            input {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <div class="header">
+            <h1>📱 Simple Social</h1>
+            <p>Clean, Fast, Minimal</p>
+        </div>
+        
+        <!-- Authentication -->
+        <div id="authSection" class="auth-section">
+            <div class="form-group">
+                <input type="text" id="username" placeholder="Username" value="john_doe">
+                <input type="password" id="password" placeholder="Password" value="password123">
+            </div>
+            <div class="form-group">
+                <button class="btn" onclick="login()">🔐 Login</button>
+                <button class="btn btn-success" onclick="showRegister()">📝 Register</button>
+            </div>
+            
+            <!-- Registration (hidden) -->
+            <div id="registerForm" class="hidden" style="margin-top: 15px;">
+                <div class="form-group">
+                    <input type="text" id="regUsername" placeholder="Username">
+                    <input type="email" id="regEmail" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="regFullName" placeholder="Full Name">
+                    <input type="password" id="regPassword" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" onclick="register()">✨ Create Account</button>
+                    <button class="btn" onclick="hideRegister()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Info -->
+        <div id="userInfo" class="user-info hidden">
+            <div id="userDetails"></div>
+            <button class="btn btn-danger btn-small" onclick="logout()" style="margin-top: 10px;">Logout</button>
+        </div>
+        
+        <!-- Create Post -->
+        <div id="createPost" class="create-post hidden">
+            <textarea id="postContent" placeholder="What's on your mind? 💭"></textarea>
+            <div class="form-group">
+                <input type="text" id="postTitle" placeholder="Title (optional)">
+                <button class="btn" onclick="createPost()">📝 Post</button>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div id="controls" class="controls hidden">
+            <button class="btn" onclick="loadPosts()">🔄 Refresh</button>
+            <button class="btn btn-success" onclick="loadRecommendations()">🎯 For You</button>
+        </div>
+        
+        <!-- Messages -->
+        <div id="messages"></div>
+        
+        <!-- Posts -->
+        <div id="posts">
+            <div class="loading">🔐 Please login to continue</div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let token = '';
+        let user = null;
+        const API = 'http://localhost:8000';
+        
+        // Utilities
+        function msg(text, type = 'success') {
+            const div = document.getElementById('messages');
+            div.innerHTML = `<div class="message ${type}">${text}</div>`;
+            setTimeout(() => div.innerHTML = '', 3000);
+        }
+        
+        function timeAgo(date) {
+            const diff = (new Date() - new Date(date)) / (1000 * 60 * 60);
+            if (diff < 1) return 'now';
+            if (diff < 24) return `${Math.floor(diff)}h`;
+            return `${Math.floor(diff / 24)}d`;
+        }
+        
+        async function api(endpoint, method = 'GET', data = null) {
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            
+            const config = { method, headers };
+            if (data) config.body = JSON.stringify(data);
+            
+            try {
+                const response = await fetch(`${API}${endpoint}`, config);
+                
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.detail || `HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                return result;
+            } catch (error) {
+                console.error('API Error:', error);
+                msg(`Error: ${error.message}`, 'error');
+                throw error;
+            }
+        }
+        
+        // Authentication
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                msg('Please enter username and password', 'error');
+                return;
+            }
+            
+            try {
+                const response = await api('/api/auth/login', 'POST', { username, password });
+                token = response.access_token;
+                user = response.user;
+                
+                msg(`Welcome, ${user.username}! 🎉`);
+                showApp();
+                loadPosts();
+            } catch (error) {
+                console.error('Login failed:', error);
+            }
+        }
+        
+        function showRegister() {
+            document.getElementById('registerForm').classList.remove('hidden');
+        }
+        
+        function hideRegister() {
+            document.getElementById('registerForm').classList.add('hidden');
+        }
+        
+        async function register() {
+            const data = {
+                username: document.getElementById('regUsername').value,
+                email: document.getElementById('regEmail').value,
+                full_name: document.getElementById('regFullName').value,
+                password: document.getElementById('regPassword').value,
+                bio: 'New user!'
+            };
+            
+            if (!data.username || !data.email || !data.password) {
+                msg('Please fill all fields', 'error');
+                return;
+            }
+            
+            try {
+                await api('/api/auth/register', 'POST', data);
+                msg('Account created! Please login.');
+                hideRegister();
+                document.getElementById('username').value = data.username;
+            } catch (error) {
+                console.error('Registration failed:', error);
+            }
+        }
+        
+        function logout() {
+            token = '';
+            user = null;
+            hideApp();
+            msg('Logged out');
+        }
+        
+        function showApp() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('userInfo').classList.remove('hidden');
+            document.getElementById('createPost').classList.remove('hidden');
+            document.getElementById('controls').classList.remove('hidden');
+            
+            document.getElementById('userDetails').innerHTML = `
+                <strong>👋 ${user.full_name || user.username}</strong><br>
+                <small>${user.bio || 'No bio yet'}</small>
+            `;
+        }
+        
+        function hideApp() {
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('userInfo').classList.add('hidden');
+            document.getElementById('createPost').classList.add('hidden');
+            document.getElementById('controls').classList.add('hidden');
+            document.getElementById('posts').innerHTML = '<div class="loading">🔐 Please login to continue</div>';
+        }
+        
+        // Posts
+        async function createPost() {
+            const title = document.getElementById('postTitle').value || 'Untitled';
+            const content = document.getElementById('postContent').value;
+            
+            if (!content.trim()) {
+                msg('Please write something!', 'error');
+                return;
+            }
+            
+            try {
+                await api('/api/posts', 'POST', {
+                    title,
+                    content,
+                    category_ids: [1]
+                });
+                
+                msg('Post created! 🎉');
+                document.getElementById('postTitle').value = '';
+                document.getElementById('postContent').value = '';
+                loadPosts();
+            } catch (error) {
+                console.error('Failed to create post:', error);
+            }
+        }
+        
+        async function loadPosts() {
+            if (!token) return;
+            
+            document.getElementById('posts').innerHTML = '<div class="loading">Loading... 📋</div>';
+            
+            try {
+                const posts = await api('/api/posts?skip=0&limit=20');
+                displayPosts(posts);
+            } catch (error) {
+                console.error('Failed to load posts:', error);
+                document.getElementById('posts').innerHTML = '<div class="loading">Failed to load posts</div>';
+            }
+        }
+        
+        async function loadRecommendations() {
+            if (!token) return;
+            
+            try {
+                document.getElementById('posts').innerHTML = '<div class="loading">Loading recommendations... 🎯</div>';
+                const posts = await api('/api/posts/recommendations');
+                
+                // Handle error responses
+                if (!Array.isArray(posts)) {
+                    throw new Error('Invalid recommendations response');
+                }
+                
+                displayPosts(posts, true);
+                msg('Recommendations loaded! 🎯');
+            } catch (error) {
+                console.error('Failed to load recommendations:', error);
+                msg('Recommendations temporarily unavailable. Please try again later.', 'error');
+                // Show regular posts instead
+                loadPosts();
+            }
+        }
+        
+        function displayPosts(posts, isRecommended = false) {
+            const container = document.getElementById('posts');
+            
+            if (!posts || posts.length === 0) {
+                container.innerHTML = '<div class="loading">No posts yet. Create the first one! 📝</div>';
+                return;
+            }
+            
+            let html = '';
+            
+            if (isRecommended) {
+                html += '<div class="recommendations">🎯 Recommended for You</div>';
+            }
+            
+            posts.forEach(post => {
+                const avatar = post.author.username ? post.author.username[0].toUpperCase() : '?';
+                
+                html += `
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-avatar">${avatar}</div>
+                            <div class="post-info">
+                                <div class="post-author">${post.author.full_name || post.author.username}</div>
+                                <div class="post-time">${timeAgo(post.created_at)}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-title">${post.title}</div>
+                        <div class="post-content">${post.content}</div>
+                        
+                        <div class="post-actions">
+                            <button class="action-btn ${post.is_liked_by_user ? 'liked' : ''}" onclick="toggleLike(${post.id}, this)">
+                                ${post.is_liked_by_user ? '❤️' : '🤍'} ${post.likes_count || 0}
+                            </button>
+                            <button class="action-btn ${post.is_saved_by_user ? 'saved' : ''}" onclick="toggleSave(${post.id}, this)">
+                                ${post.is_saved_by_user ? '⭐' : '☆'} Save
+                            </button>
+                            <button class="action-btn" onclick="toggleComments(${post.id})">
+                                💬 ${post.comments_count || 0}
+                            </button>
+                        </div>
+                        
+                        <div id="comments-${post.id}" class="comment-section hidden">
+                            <div class="comment-input">
+                                <input type="text" placeholder="Write a comment..." id="comment-${post.id}" onkeypress="handleCommentKey(event, ${post.id})">
+                                <button class="btn btn-small" onclick="addComment(${post.id})">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Interactions
+        async function toggleLike(postId, btn) {
+            try {
+                const result = await api(`/api/posts/${postId}/like`, 'POST');
+                const liked = result.liked;
+                
+                btn.classList.toggle('liked', liked);
+                btn.innerHTML = `${liked ? '❤️' : '🤍'} ${liked ? 'Liked' : 'Like'}`;
+                
+                msg(liked ? 'Liked! ❤️' : 'Unliked');
+            } catch (error) {
+                console.error('Failed to toggle like:', error);
+            }
+        }
+        
+        async function toggleSave(postId, btn) {
+            try {
+                const result = await api(`/api/posts/${postId}/save`, 'POST');
+                const saved = result.saved;
+                
+                btn.classList.toggle('saved', saved);
+                btn.innerHTML = `${saved ? '⭐' : '☆'} ${saved ? 'Saved' : 'Save'}`;
+                
+                msg(saved ? 'Saved! ⭐' : 'Removed from saved');
+            } catch (error) {
+                console.error('Failed to toggle save:', error);
+            }
+        }
+        
+        function toggleComments(postId) {
+            const section = document.getElementById(`comments-${postId}`);
+            section.classList.toggle('hidden');
+        }
+        
+        function handleCommentKey(event, postId) {
+            if (event.key === 'Enter') {
+                addComment(postId);
+            }
+        }
+        
+        async function addComment(postId) {
+            const input = document.getElementById(`comment-${postId}`);
+            const content = input.value.trim();
+            
+            if (!content) {
+                msg('Please write a comment', 'error');
+                return;
+            }
+            
+            try {
+                await api(`/api/posts/${postId}/comment?content=${encodeURIComponent(content)}`, 'POST');
+                msg('Comment added! 💬');
+                input.value = '';
+                
+                // Add to UI
+                const section = document.getElementById(`comments-${postId}`);
+                section.insertAdjacentHTML('beforeend', `
+                    <div class="comment">
+                        <span class="comment-author">${user.username}</span>
+                        ${content}
+                    </div>
+                `);
+            } catch (error) {
+                console.error('Failed to add comment:', error);
+            }
+        }
+        
+        // Initialize
+        console.log('📱 Simple Social loaded!');
+    </script>
+</body>
+</html>

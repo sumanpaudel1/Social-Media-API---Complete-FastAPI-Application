@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+asyncpg
+alembic
+psycopg2-binary
+redis
+fastapi-cache2
+python-dotenv
+pydantic[email]
+passlib[bcrypt]
+python-jose[cryptography]
+python-multipart
+aioredis
+scikit-learn
+numpy
